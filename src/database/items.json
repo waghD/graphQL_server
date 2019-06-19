@@ -1,0 +1,34 @@
+[
+    {
+        "itemUid": 0,
+        "type": "book",
+        "label": "Book label uid 0",
+        "content": "content uid 0",
+        "refs": [
+           1
+        ]
+     },
+     {
+        "itemUid": 1,
+        "type": "book",
+        "label": "Book label uid 1",
+        "content": "content uid 1",
+        "refs": [
+            0
+        ]
+    },
+     {
+        "itemUid": 2,
+        "type": "book",
+        "label": "Book label uid 2",
+        "content": "Lore ipsum dolor",
+        "refs": []
+     },
+     {
+        "itemUid": 3,
+        "type": "book",
+        "label": "Book label uid 3",
+        "content": "Lore ipsum dolor",
+        "refs": []
+     }
+]
