@@ -4,9 +4,13 @@ const path = require('path');
 
 const DB_FILE_NAME = 'sqlite.db';
 
-fs.unlinkSync(path.join(__dirname, DB_FILE_NAME));
+const dbPath = path.join(__dirname, DB_FILE_NAME);
 
-const db = new sqlite.Database(`./${DB_FILE_NAME}`, async (err) => {
+if(fs.existsSync(dbPath)){
+    fs.unlinkSync(dbPath);
+}
+
+const db = new sqlite.Database(dbPath, async (err) => {
     if (err) {
         console.log('error in creation');
         console.error(err.message);
