@@ -80,7 +80,6 @@ process.addListener('beforeExit', () => {
 export default {
   Query: {
     cubes: (parent: any, args: any, context: any, info: any) => {
-      console.log(args);
       return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM cube`, (error: Error, result: DBCube[]) => {
           if (error) {
@@ -88,7 +87,6 @@ export default {
             console.error(error.message);
             resolve([]);
           } else {
-            console.log('no err')
             convertCubes(result)
               .then(res => {
                 if (args.id) {
@@ -110,7 +108,6 @@ export default {
             console.error(error.message);
             resolve([]);
           } else {
-            console.log('no err')
             convertCubes(result)
               .then(res => {
                 const start = res.filter(cube => cube.uid == args.startId);
@@ -132,7 +129,6 @@ export default {
             console.error(error.message);
             resolve([]);
           } else {
-            console.log('no err')
             const res = convertItems(result)
             const index = res.findIndex(item => item.itemUid == args.itemId);
             if (index === -1) resolve([]);
@@ -143,7 +139,6 @@ export default {
                 console.error(error.message);
                 resolve([]);
               } else {
-                console.log('no err')
                 convertCubes(cubeResult)
                   .then(cubeRes => {
                     const filteredCubes = cubeRes.filter(cube => {
