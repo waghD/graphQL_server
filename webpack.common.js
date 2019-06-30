@@ -10,6 +10,10 @@ module.exports = {
       }
     ]
   },
+  node: {
+    __dirname: true,
+    __filename: true,
+  },
   output: {
     filename: 'server.js',
     path: path.resolve(__dirname, 'dist')

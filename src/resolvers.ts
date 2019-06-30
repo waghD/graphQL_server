@@ -7,11 +7,9 @@ import { Content } from './models/Content';
 
 const DB_FILE_NAME = 'sqlite.db';
 
-const dbPath = path.join('..',__dirname, 'database', DB_FILE_NAME);
+const dbPath = path.join(__dirname, 'database', DB_FILE_NAME);
 
-console.log('db path: ' + dbPath);
-
-const db = new sqlite.Database('C:/Users/Daniel/Projekte/IT-projekt/graphQL_server/src/database/sqlite.db', sqlite.OPEN_READONLY, (err) => {
+const db = new sqlite.Database(dbPath, sqlite.OPEN_READONLY, (err) => {
   if (err) {
     console.log('error in db');
     console.error(err.message);
