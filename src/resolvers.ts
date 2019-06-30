@@ -1,9 +1,17 @@
 import * as sqlite from 'sqlite3';
-import { DBItem, DBCube } from "./models/interfaces";
+import { DBItem, DBCube, DBContent } from "./models/interfaces";
 import { Item } from './models/Item';
 import { Cube } from './models/Cube';
+import * as path from 'path';
+import { Content } from './models/Content';
 
-const db = new sqlite.Database('../database/sqlite.db', sqlite.OPEN_READONLY, (err) => {
+const DB_FILE_NAME = 'sqlite.db';
+
+const dbPath = path.join('..', __dirname, 'database', DB_FILE_NAME);
+
+console.log('db path: ' + dbPath);
+
+const db = new sqlite.Database('src\\database\\sqlite.db', sqlite.OPEN_READONLY, (err) => {
   if (err) {
     console.log('error in db');
     console.error(err.message);
@@ -12,25 +20,39 @@ const db = new sqlite.Database('../database/sqlite.db', sqlite.OPEN_READONLY, (e
   }
 })
 
-const convertItems = (dbItems: DBItem[]): Item[] => {
-  const itemList: Item[] = dbItems.map((item: DBItem): Item => {
-    return new Item(item);
+const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM `content`', (err: Error, res: DBContent[]) => {
+      let content: Content[] = [];
+      if(err) {
+        console.error(err);
+      } else {
+        content = res.map((dbContent: DBContent):Content => {
+          return new Content(dbContent);
+        })
+      }
+      
+      const itemList: Item[] = dbItems.map((item: DBItem): Item => {
+        return new Item(item);
+      })
+      itemList.forEach((item: Item, i: number, list: Item[]): void => {
+        item.getRefs(list);
+        item.getContent(content);
+      })
+      resolve(itemList);
+    })
   })
-  itemList.forEach((item: Item, i: number, list: Item[]): void => {
-    item.getRefs(list);
-  })
-  return itemList;
 }
 
 const convertCubes = (dbCubes: DBCube[]): Promise<Cube[]> => {
   return new Promise((resolve, reject) => {
-    db.all('SELECT * FROM item', (err: Error, res: DBItem[]) => {
+    db.all('SELECT * FROM item', async (err: Error, res: DBItem[]) => {
       if (err) {
         console.error(err.message);
         resolve([]);
       }
 
-      const items = convertItems(res);
+      const items = await convertItems(res);
 
       const cubes: Cube[] = dbCubes.map((cube: DBCube): Cube => {
         return new Cube(cube);
@@ -123,13 +145,13 @@ export default {
       if (!args.itemId) return [];
 
       return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM item`, (error: Error, result: DBItem[]) => {
+        db.all(`SELECT * FROM item`, async (error: Error, result: DBItem[]) => {
           if (error) {
             console.log('err')
             console.error(error.message);
             resolve([]);
           } else {
-            const res = convertItems(result)
+            const res = await convertItems(result)
             const index = res.findIndex(item => item.itemUid == args.itemId);
             if (index === -1) resolve([]);
             const items = findConnectedItemsRecursive(res[index], []);

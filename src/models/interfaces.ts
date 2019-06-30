@@ -1,3 +1,4 @@
+
 export interface DBCube {
     uid: number;
     label: string;
@@ -17,11 +18,27 @@ export interface DBItem {
     refs: string
 }
 
+export interface DBContent {
+    contentId: number,
+    label: string,
+    contentType: string,
+    text: string,
+    src: string,
+}
+
+export interface Content {
+    contentId: number;
+    label: string;
+    contentType: 'text' | 'imageLink' | 'pdfLink';
+    text: string;
+    src: string;
+}
+
 export interface Item {
     itemUid: number;
     type: 'book' | 'shelf' | 'unknown';
     label: string;
-    content: string;
+    content: Content[];
     refs: Item[];
 }
 

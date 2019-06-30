@@ -16,13 +16,24 @@ type Cube {
 }
 
 """
+The content of an Item
+"""
+type ItemContent {
+  contentId: ID
+  label: String
+  contentType: String
+  text: String
+  src: String
+}
+
+"""
 Items in a room
 """
 type Item {
   itemUid: ID
   type: String
   label: String
-  content: String
+  content: [ItemContent]
   refs: [Item]
 }
 

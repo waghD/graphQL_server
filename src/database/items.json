@@ -3,7 +3,9 @@
         "itemUid": 0,
         "type": "book",
         "label": "Book label uid 0",
-        "content": "content uid 0",
+        "content": [
+           1,1,1,1,1,1,1,1
+        ],
         "refs": [
            1
         ]
@@ -12,7 +14,9 @@
         "itemUid": 1,
         "type": "book",
         "label": "Book label uid 1",
-        "content": "content uid 1",
+        "content": [
+           0,1,2
+        ],
         "refs": [
             0
         ]
@@ -21,14 +25,18 @@
         "itemUid": 2,
         "type": "book",
         "label": "Book label uid 2",
-        "content": "Lore ipsum dolor",
+        "content": [
+           0
+        ],
         "refs": []
      },
      {
         "itemUid": 3,
         "type": "book",
         "label": "Book label uid 3",
-        "content": "Lore ipsum dolor",
+        "content": [
+           2
+        ],
         "refs": []
      }
 ]

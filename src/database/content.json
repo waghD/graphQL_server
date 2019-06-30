@@ -1,0 +1,20 @@
+[
+    {
+        "id": 0,
+        "label": "Test Text",
+        "contentType": "text",
+        "text": "Some test Text"
+    },{
+        "id": 1,
+        "label": "Test image",
+        "contentType": "imageLink",
+        "text": "Image failed loading",
+        "src": "https://cdn.ebaumsworld.com/mediaFiles/picture/705380/85822567.jpg"
+    },{
+        "id": 2,
+        "label": "Test pdf",
+        "contentType": "pdfLink",
+        "text": "Pdf failed loading",
+        "src": "http://www.orimi.com/pdf-test.pdf"
+    }
+]

@@ -22,9 +22,13 @@ const db = new sqlite.Database(dbPath, async (err) => {
         const itemFile = fs.readFileSync(path.join(__dirname, 'items.json'), {
             encoding: 'utf-8'
         })
+        const contentFile = fs.readFileSync(path.join(__dirname, 'content.json'), {
+            encoding: 'utf-8'
+        })
 
         const cubes = JSON.parse(cubeFile);
         const items = JSON.parse(itemFile);
+        const content = JSON.parse(contentFile);
 
         const promArr = [
             new Promise((res, rej) => {
@@ -43,6 +47,16 @@ const db = new sqlite.Database(dbPath, async (err) => {
                         rej(err);
                     } else {
                         console.log('Created Table item');
+                        res();
+                    }
+                });
+            }),
+            new Promise((res, rej) => {
+                db.run('CREATE TABLE content (contentId integer PRIMARY KEY, label text, contentType text, text text, src text)', (err) => {
+                    if(err) {
+                        rej(err);
+                    } else {
+                        console.log('Created Table content');
                         res();
                     }
                 });
@@ -65,12 +79,24 @@ const db = new sqlite.Database(dbPath, async (err) => {
 
         items.forEach((item) => {
             db.run('INSERT INTO item (itemUid, type, label, content, refs) VALUES (?, ?, ?, ?, ?)',
-                [item.itemUid, item.type, item.label, item.content, item.refs.join(';')], (err) => {
+                [item.itemUid, item.type, item.label, item.content.join(';'), item.refs.join(';')], (err) => {
                     if (err) {
                         console.log('error in item insert')
                         console.error(err.message);
                     } else {
                         console.log('Item Insert successfull');
+                    }
+                })
+        })
+
+        content.forEach((content) => {
+            db.run('INSERT INTO content (contentId, label, contentType, text, src) VALUES (?, ?, ?, ?, ?)',
+                [content.id, content.label, content.contentType, content.text, content.src || ''], (err) => {
+                    if (err) {
+                        console.log('error in content insert')
+                        console.error(err.message);
+                    } else {
+                        console.log('Content Insert successfull');
                     }
                 })
         })
