@@ -14,7 +14,14 @@ CMD commands run in project root folder
 
 ##### 3. Compile programm
 
+hotreload server
+
     npm run build
+
+single compilation
+
+
+    npm run build:prod 
 
 ##### 4. Run programm
 
