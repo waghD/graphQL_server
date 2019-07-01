@@ -2,7 +2,7 @@
     {
         "itemUid": 0,
         "type": "book",
-        "label": "Book label uid 0",
+        "label": "RAMI Architekturen",
         "content": [
            1,1,1,1,1,1,1,1
         ],
@@ -13,7 +13,7 @@
      {
         "itemUid": 1,
         "type": "book",
-        "label": "Book label uid 1",
+        "label": "Text bild und PDF",
         "content": [
            0,1,2
         ],
@@ -26,7 +26,7 @@
         "type": "book",
         "label": "Book label uid 2",
         "content": [
-           0
+           0, 3
         ],
         "refs": []
      },
@@ -35,7 +35,7 @@
         "type": "book",
         "label": "Book label uid 3",
         "content": [
-           2
+           2, 4
         ],
         "refs": []
      }

@@ -1,20 +1,31 @@
 [
     {
         "id": 0,
-        "label": "Test Text",
+        "label": "Dummy Test Text",
         "contentType": "text",
-        "text": "Some test Text"
-    },{
+        "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+    }, {
         "id": 1,
-        "label": "Test image",
+        "label": "RAMI 4.0 Referenzarchitektur",
         "contentType": "imageLink",
-        "text": "Image failed loading",
-        "src": "https://cdn.ebaumsworld.com/mediaFiles/picture/705380/85822567.jpg"
-    },{
+        "text": "RAMI",
+        "src": "https://www.dke.de/resource/blob/1757694/f1a4563e7e0242c7dec08f0d9734a5ef/rami-4-0-modell-data.jpg"
+    }, {
         "id": 2,
         "label": "Test pdf",
         "contentType": "pdfLink",
         "text": "Pdf failed loading",
         "src": "http://www.orimi.com/pdf-test.pdf"
+    }, {
+        "id": 3,
+        "label": "Long Dummy Text",
+        "contentType": "text",
+        "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse"
+    }, {
+        "id": 4,
+        "label": "RAMI Text Architektur PDF",
+        "contentType": "pdfLink",
+        "text": "RAMI Architektur PDF",
+        "src": "https://www.zvei.org/fileadmin/user_upload/Presse_und_Medien/Publikationen/2015/april/Das_Referenzarchitekturmodell_Industrie_4.0__RAMI_4.0_/Faktenblatt-Industrie4_0-RAMI-4_0.pdf"
     }
 ]
