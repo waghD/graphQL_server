@@ -3,9 +3,9 @@
       "uid": 0,
       "label": "Product - Information (Type: Development)",
       "color": "#ca9ed8",
-      "x": 6,
-      "y": 0,
-      "z": 3,
+      "contentTags": [
+         "Asset", "Product", "Type Development"
+      ],
       "items": [],
       "neighbours": [1]
    },
@@ -13,9 +13,9 @@
       "uid": 1,
       "label": "Field Device - Information (Type: Development)",
       "color": "#ca9ed8",
-      "x": 5,
-      "y": 0,
-      "z": 3,
+      "contentTags": [
+         "Asset", "Field Device", "Type Development"
+      ],
       "items": [],
       "neighbours": [0,2]
    },
@@ -23,9 +23,9 @@
       "uid": 2,
       "label": "Field Device - Information (Type: Maintenance/Usage)",
       "color": "#ca9ed8",
-      "x": 5,
-      "y": 1,
-      "z": 3,
+      "contentTags": [
+         "Asset", "Field Device", "Type Maintenance"
+      ],
       "items": [1],
       "neighbours": [1,3]
    },
@@ -33,9 +33,9 @@
       "uid": 3,
       "label": "Field Device - Information (Instance: Production)",
       "color": "#ca9ed8",
-      "x": 5,
-      "y": 2,
-      "z": 3,
+      "contentTags":[
+         "Asset", "Field Device", "Instance Production"
+      ],
       "items": [],
       "neighbours": [2,4]
    },
@@ -43,9 +43,9 @@
       "uid": 4,
       "label": "Field Device - Information (Instance: Maintenance/Usage)",
       "color": "#ca9ed8",
-      "x": 5,
-      "y": 3,
-      "z": 3,
+      "contentTags":[
+         "Asset", "Field Device", "Instance Maintenance"
+      ],
       "items": [0, 2, 3],
       "neighbours": [3]
    }

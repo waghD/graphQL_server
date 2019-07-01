@@ -32,7 +32,7 @@ const db = new sqlite.Database(dbPath, async (err) => {
 
         const promArr = [
             new Promise((res, rej) => {
-                db.run('CREATE TABLE cube (uid integer PRIMARY KEY, label text, color text, x integer, y integer, z integer, items text, neighbours text)', (err) => {
+                db.run('CREATE TABLE cube (uid integer PRIMARY KEY, label text, color text, contentTags text, items text, neighbours text)', (err) => {
                     if(err) {
                         rej(err);
                     } else {
@@ -66,8 +66,8 @@ const db = new sqlite.Database(dbPath, async (err) => {
         await Promise.all(promArr);
 
         cubes.forEach((cube) => {
-            db.run(`INSERT INTO cube (uid, label, color, x, y, z, items, neighbours) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [cube.uid, cube.label, cube.color, cube.x, cube.y, cube.z, cube.items.join(';'), cube.neighbours.join(';')], (err) => {
+            db.run(`INSERT INTO cube (uid, label, color, contentTags, items, neighbours) VALUES (?, ?, ?, ?, ?, ?)`,
+                [cube.uid, cube.label, cube.color, cube.contentTags.join(';'), cube.items.join(';'), cube.neighbours.join(';')], (err) => {
                     if (err) {
                         console.log('error in cube insert')
                         console.error(err.message);

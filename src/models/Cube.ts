@@ -4,9 +4,9 @@ export class Cube implements Cube{
     uid: number;
     label: string;
     color: string;
-    x: number;
-    y: number;
-    z: number;
+    x: number = -1;
+    y: number = -1;
+    z: number = -1;
     items: Item[] = [];
     neighbours: Cube[] = [];
 
@@ -17,15 +17,18 @@ export class Cube implements Cube{
         this.uid = dbCube.uid;
         this.label = dbCube.label;
         this.color = dbCube.color;
-        this.x = dbCube.x;
-        this.y = dbCube.y;
-        this.z = dbCube.z;
         this.itemIds = dbCube.items.split(';').map((str: string) => {
             return parseInt(str);
         })
         this.neighbourIds = dbCube.neighbours.split(';').map((str: string) => {
             return parseInt(str);
         })
+    }
+
+    setCoords(z: number, x: number, y: number){
+        this.z = z;
+        this.x = x;
+        this.y = y;
     }
 
     getNeighbours(cubeList: Cube[]): void {

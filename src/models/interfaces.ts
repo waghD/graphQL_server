@@ -3,9 +3,7 @@ export interface DBCube {
     uid: number;
     label: string;
     color: string;
-    x: number;
-    y: number;
-    z: number;
+    contentTags: string;
     items: string;
     neighbours: string;
 }
