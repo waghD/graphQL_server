@@ -4,6 +4,7 @@ import { Item } from './models/Item';
 import { Cube } from './models/Cube';
 import * as path from 'path';
 import { Content } from './models/Content';
+import { RAMI } from './models/cube_scheme';
 
 const DB_FILE_NAME = 'sqlite.db';
 
@@ -52,9 +53,7 @@ const convertCubes = (dbCubes: DBCube[]): Promise<Cube[]> => {
 
       const items = await convertItems(res);
 
-      const cubes: Cube[] = dbCubes.map((cube: DBCube): Cube => {
-        return new Cube(cube);
-      })
+      const cubes: Cube[] = new RAMI().build(dbCubes);
 
       cubes.forEach((cube: Cube, i: number, list: Cube[]): void => {
         cube.getItems(items);
