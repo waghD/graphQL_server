@@ -51,10 +51,10 @@
    },
    {
       "uid": 5,
-      "label": "Field Device - Integration (Instance: Product)",
+      "label": "Field Device - Integration (Instance: Production)",
       "color": "#ca9ed8",
       "contentTags":[
-         "Integration", "Field Device", "Instance Product"
+         "Integration", "Field Device", "Instance Production"
       ],
       "items": [3,4],
       "neighbours": [3, 6]
@@ -116,7 +116,7 @@
       "contentTags":[
          "Communication", "Product", "Instance Maintenance"
       ],
-      "items": [],
+      "items": [12, 13],
       "neighbours": []
    }
 ]

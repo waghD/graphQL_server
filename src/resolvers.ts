@@ -23,14 +23,14 @@ const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM `content`', (err: Error, res: DBContent[]) => {
       let content: Content[] = [];
-      if(err) {
+      if (err) {
         console.error(err);
       } else {
-        content = res.map((dbContent: DBContent):Content => {
+        content = res.map((dbContent: DBContent): Content => {
           return new Content(dbContent);
         })
       }
-      
+
       const itemList: Item[] = dbItems.map((item: DBItem): Item => {
         return new Item(item);
       })
@@ -43,7 +43,7 @@ const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
   })
 }
 
-const convertCubes = (dbCubes: DBCube[]): Promise<Cube[]> => {
+const convertCubes = (dbCubes: DBCube[], fill: boolean = false): Promise<Cube[]> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM item', async (err: Error, res: DBItem[]) => {
       if (err) {
@@ -53,7 +53,7 @@ const convertCubes = (dbCubes: DBCube[]): Promise<Cube[]> => {
 
       const items = await convertItems(res);
 
-      const cubes: Cube[] = new RAMI().build(dbCubes);
+      const cubes: Cube[] = new RAMI().build(dbCubes, fill);
 
       cubes.forEach((cube: Cube, i: number, list: Cube[]): void => {
         cube.getItems(items);
@@ -106,7 +106,7 @@ export default {
             console.error(error.message);
             resolve([]);
           } else {
-            convertCubes(result)
+            convertCubes(result, true)
               .then(res => {
                 if (args.id) {
                   const filtered = res.filter(cube => cube.uid == args.id);

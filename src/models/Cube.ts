@@ -1,6 +1,6 @@
 import {DBItem, DBCube, Item} from './interfaces';
 
-export class Cube implements Cube{
+export class Cube implements Cube {
     uid: number;
     label: string;
     color: string;
@@ -26,6 +26,9 @@ export class Cube implements Cube{
     }
 
     setCoords(z: number, x: number, y: number){
+        if(z < 0 || x < 0 || y < 0){
+            console.log(this.label + ' invalid coordinate');
+        }
         this.z = z;
         this.x = x;
         this.y = y;

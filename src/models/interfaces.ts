@@ -27,7 +27,7 @@ export interface DBContent {
 export interface Content {
     contentId: number;
     label: string;
-    contentType: 'text' | 'imageLink' | 'pdfLink';
+    contentType: 'text' | 'imageLink' | 'pdfLink' | 'externalLink';
     text: string;
     src: string;
 }
