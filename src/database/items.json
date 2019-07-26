@@ -2,41 +2,153 @@
     {
         "itemUid": 0,
         "type": "book",
-        "label": "RAMI Architekturen",
+        "label": "Product 1 Development",
         "content": [
-           1,1,1,1,1,1,1,1
+           0, 4,4,4
         ],
         "refs": [
-           1
+           5, 6, 7, 9, 12
         ]
      },
      {
         "itemUid": 1,
         "type": "book",
-        "label": "Text bild und PDF",
+        "label": "Product 2 Development",
         "content": [
-           0,1,2
+           1,2
         ],
-        "refs": [
-            0
-        ]
+        "refs": []
     },
      {
         "itemUid": 2,
         "type": "book",
-        "label": "Book label uid 2",
+        "label": "Product 3 Development",
         "content": [
-           0, 3
+           3, 5, 5
         ],
-        "refs": []
+        "refs": [
+           5, 6, 8, 10, 13
+        ]
      },
      {
         "itemUid": 3,
         "type": "book",
-        "label": "Book label uid 3",
+        "label": "Maschine 1 Documentation",
         "content": [
-           2, 4
+           6
         ],
-        "refs": []
+        "refs": [
+           5, 11
+        ]
+     },
+     {
+        "itemUid": 4,
+        "type": "book",
+        "label": "Maschine 2 Documentation",
+        "content": [
+           7
+        ],
+        "refs": [
+           6, 11
+        ]
+     },
+     {
+        "itemUid": 5,
+        "type": "book",
+        "label": "Maschine 1 Production Information",
+        "content": [
+           8,9
+        ],
+        "refs": [
+           0,2, 3
+        ]
+     },
+     {
+        "itemUid": 6,
+        "type": "book",
+        "label": "Maschine 2 Production Information",
+        "content": [
+           10,11
+        ],
+        "refs": [
+           0,2,4
+        ]
+     },
+     {
+        "itemUid": 7,
+        "type": "book",
+        "label": "Product 1 Assets",
+        "content": [
+           12,13,14,15
+        ],
+        "refs": [
+           0, 9, 12
+        ]
+     },
+     {
+        "itemUid": 8,
+        "type": "book",
+        "label": "Product 3 Assets",
+        "content": [
+         12,13,14,15
+        ],
+        "refs": [
+           2, 10, 13
+        ]
+     },
+     {
+        "itemUid": 9,
+        "type": "book",
+        "label": "Product 1 Marketing Campaign",
+        "content": [
+         16, 17, 18
+        ],
+        "refs": [
+           0, 7, 12
+        ]
+     },
+     {
+        "itemUid": 10,
+        "type": "book",
+        "label": "Product 2 Marketing Campaign",
+        "content": [
+         19,20,21
+        ],
+        "refs": [
+           2, 8, 13
+        ]
+     },
+     {
+        "itemUid": 11,
+        "type": "book",
+        "label": "How we Connect to the World, our IoT",
+        "content": [
+         22
+        ],
+        "refs": [
+           3, 4, 12, 13
+        ]
+     },
+     {
+        "itemUid": 12,
+        "type": "book",
+        "label": "Product 1, Communication",
+        "content": [
+         23
+        ],
+        "refs": [
+           0, 7, 9, 11
+        ]
+     },
+     {
+        "itemUid": 13,
+        "type": "book",
+        "label": "Product 3, Communication",
+        "content": [
+         23
+        ],
+        "refs": [
+           2, 8, 10, 11
+        ]
      }
 ]

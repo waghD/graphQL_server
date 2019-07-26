@@ -1,0 +1,11 @@
+
+Todo:
+  ☐ Add contenttype: externalLink
+  ☐ add more testdata to database
+  ☐ add empty blocks 
+  ☐ check that no coordinates are duplicated
+  ☐ check connections are valid
+    ☐ neighbors are actually neighbors
+    ☐ connections always go both ways
+  ☐ remove content tags, read coordinates from labels
+
