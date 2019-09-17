@@ -38,47 +38,61 @@ export class RAMI extends CubeScheme {
     checkConsistency(cubes: Cube[]): void{
         const realCubes = cubes.filter((filtCube: Cube): boolean => filtCube.uid !== -1);
         realCubes.forEach((cube: Cube): void => {
+
+            // check if connections are mutual
             if(!cube.checkMyNeighbours()){
                 throw new Error(`Cube ${cube.uid} does not share mutual relations with its neighbours`);
             }
+
+            // check if connected cubes are actual neighbours
             cube.neighbours.forEach((neighbourCube: Cube): void => {
                 if(cube.x === neighbourCube.x && cube.y === neighbourCube.y){
+
                     // z offset neighbours
                     const smallerZ = cube.z > neighbourCube.z ? neighbourCube.z : cube.z;
                     const biggerZ = cube.z > neighbourCube.z ? cube.z : neighbourCube.z;
                     if(biggerZ - smallerZ > 1){
+
                         // there is a gap between the connected Cubes. check whether there is really no other cube in between
                         const index = realCubes.findIndex((findCube: Cube): boolean => findCube.x === cube.x && findCube.y === cube.y && findCube.z > smallerZ && findCube.z < biggerZ && findCube.uid !== -1);
                         if(index !== -1){
+
                             // there is a cube between
                             throw new Error(`Cube ${cube.uid} and Cube ${neighbourCube.uid} are not actual neighbours because Cube ${cubes[index].uid} is in between`);
                         }
                     }
                 } else if(cube.x === neighbourCube.x && cube.z === neighbourCube.z){
+
                     // y offset neighbours
                     const smallerY = cube.y > neighbourCube.y ? neighbourCube.y : cube.y;
                     const biggerY = cube.y > neighbourCube.y ? cube.y : neighbourCube.y;
                     if(biggerY - smallerY > 1) {
+
                         // there is a gap between the connected Cubes. check whether there is really no other cube in between
                         const index = realCubes.findIndex((findCube: Cube): boolean => findCube.x === cube.x && findCube.z === cube.z && findCube.y > smallerY && findCube.y < biggerY && findCube.uid !== -1);
                         if(index !== -1){
+
                             // there is a cube between
                             throw new Error(`Cube ${cube.uid} and Cube ${neighbourCube.uid} are not actual neighbours because Cube ${cubes[index].uid} is in between`);
                         }
                     }
                 } else if(cube.z === neighbourCube.z && cube.y === neighbourCube.y) {
+
                     // x offset neighbours
                     const smallerX = cube.x > neighbourCube.x ? neighbourCube.x : cube.x;
                     const biggerX = cube.x > neighbourCube.x ? cube.x : neighbourCube.x;
                     if(biggerX - smallerX > 1) {
+
                         // there is a gap between the connected Cubes. check whether there is really no other cube in between
                         const index = realCubes.findIndex((findCube: Cube): boolean => findCube.y === cube.y && findCube.z === cube.z && findCube.x > smallerX && findCube.x < biggerX && findCube.uid !== -1);
                         if(index !== -1){
+
                             // there is a cube between
                             throw new Error(`Cube ${cube.uid} and Cube ${neighbourCube.uid} are not actual neighbours because Cube ${cubes[index].uid} is in between`);
                         }
                     }
                 } else {
+
                     // Connected Cubes are not neighbours
                     throw new Error(`Cube ${cube.uid} is not an actual neighbour to Cube ${neighbourCube.uid}`);
                 }
@@ -99,6 +113,8 @@ export class RAMI extends CubeScheme {
             neighbours: '',
             uid: -1
         }
+
+        // build RAMI Cube full with empty Cubes
         const ramiCube: Cube[][][] = new Array<Cube[][]>(this.zLayers.length)
         for(let z = 0; z < this.zLayers.length; z++){
             const xArr = new Array<Cube[]>(this.xLayers.length);
@@ -113,6 +129,8 @@ export class RAMI extends CubeScheme {
             }
             ramiCube[z] = xArr;
         }
+
+        // insert actual cubes into filled rami model
         cubes.forEach((cube: Cube) => {
             if (!ramiCube[cube.z][cube.x][cube.y] || ramiCube[cube.z][cube.x][cube.y].uid === -1) {
                 ramiCube[cube.z][cube.x][cube.y] = cube;
@@ -131,9 +149,13 @@ export class RAMI extends CubeScheme {
      * @param fill Boolean whether or not the Model should be filled up with empty cubes
      */
     build(dbCube: DBCube[], fill: boolean): Cube[] {
+
+        // Generate Cube Javascript objects
         const cubes: Cube[] = dbCube.map((dbCube: DBCube) => {
             const cube: Cube = new Cube(dbCube);
             const tags: string[] = dbCube.contentTags.split(';');
+
+            // calculate coordinates based on tags
             if (tags.length === 3) {
                 const [z, x, y] = tags.map((tag: string, index: number): number => {
                     const normalizedTag = this.normalizeTag(tag);
@@ -152,7 +174,7 @@ export class RAMI extends CubeScheme {
                             break;
                         }
                         default: {
-                            console.error('too many tags');
+                            console.error('impossible to reach code was reached');
                         }
                     }
                     return searchArr.findIndex((val: string) => val === normalizedTag);
@@ -161,6 +183,8 @@ export class RAMI extends CubeScheme {
             }
             return cube;
         });
+
+        // fill RAMI Model with empty cubes if flag is set
         return fill ? this.fillWithEmptyCubes(cubes) : cubes;
     }
 

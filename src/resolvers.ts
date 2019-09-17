@@ -38,9 +38,12 @@ const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
         })
       }
 
+      // convert Data to Objects
       const itemList: Item[] = dbItems.map((item: DBItem): Item => {
         return new Item(item);
       })
+
+      // resolve id based connections to object references
       itemList.forEach((item: Item, i: number, list: Item[]): void => {
         item.getRefs(list);
         item.getContent(content);
@@ -67,13 +70,18 @@ const convertCubes = (dbCubes: DBCube[], fill: boolean = false): Promise<Cube[]>
   
         const rami: CubeScheme = new RAMI();
   
+        // get rami model
         const cubes: Cube[] = rami.build(dbCubes, fill);
   
+        // replace id based connections with object references
         cubes.forEach((cube: Cube, i: number, list: Cube[]): void => {
           cube.getItems(items);
           cube.getNeighbours(list);
         })
+
+        // check consistency of model
         rami.checkConsistency(cubes);
+
         resolve(cubes);
       }catch(error){
         console.error(error);
@@ -92,15 +100,23 @@ const convertCubes = (dbCubes: DBCube[], fill: boolean = false): Promise<Cube[]>
  * @param pathArray Array of Cubes on the current path
  */
 const findPathRecursive = (cube: Cube, fullArray: Cube[], targetId: number, pathArray: Cube[]): Cube[] => {
+
+  // add current cube to list of visited cubes to avoid endless loops
   pathArray.push(cube);
   fullArray.push(cube);
+
+  // recursive anchor
   if (cube.uid == targetId) return pathArray;
+
+  // path in the direction of every neighbour that was not yet pathed to
   const paths: Cube[][] = [];
   cube.neighbours.forEach(neighbor => {
     if (fullArray.findIndex(cubeInQuestion => cubeInQuestion.uid === neighbor.uid) === -1) {
       paths.push(findPathRecursive(neighbor, fullArray, targetId, [...pathArray]));
     }
   })
+
+  // select shortest path
   if (paths.length > 0) {
     let shortestPath = paths[0];
     paths.forEach(path => shortestPath = ((shortestPath.length > path.length && path.length > 0) || shortestPath.length === 0) ? path : shortestPath);
@@ -116,7 +132,11 @@ const findPathRecursive = (cube: Cube, fullArray: Cube[], targetId: number, path
  * @param array List of already visited items
  */
 const findConnectedItemsRecursive = (item: Item, array: Item[]): Item[] => {
+
+  // add item to list of visited items
   array.push(item);
+
+  // continue to connected not yet visited items
   item.refs.forEach(ref => {
     if (array.findIndex(find => ref.itemUid === find.itemUid) === -1) {
       findConnectedItemsRecursive(ref, array);
