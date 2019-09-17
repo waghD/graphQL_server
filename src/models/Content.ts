@@ -1,5 +1,8 @@
 import {DBContent} from './interfaces';
 
+/**
+ * Class representation of the content in an Item
+ */
 export class Content implements Content {
     private id: number;
     label: string;    

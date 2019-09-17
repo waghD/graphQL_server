@@ -6,16 +6,23 @@ const DB_FILE_NAME = 'sqlite.db';
 
 const dbPath = path.join(__dirname, DB_FILE_NAME);
 
+/**
+ * Delete prevous Database file
+ */
 if(fs.existsSync(dbPath)){
     fs.unlinkSync(dbPath);
 }
 
+/**
+ * Connect to Database
+ */
 const db = new sqlite.Database(dbPath, async (err) => {
     if (err) {
         console.log('error in creation');
         console.error(err.message);
     } else {
         console.log('Connected successfully to database');
+        // read setup files.
         const cubeFile = fs.readFileSync(path.join(__dirname, 'cube.json'), {
             encoding: 'utf-8'
         })
@@ -30,6 +37,7 @@ const db = new sqlite.Database(dbPath, async (err) => {
         const items = JSON.parse(itemFile);
         const content = JSON.parse(contentFile);
 
+        // create tables
         const promArr = [
             new Promise((res, rej) => {
                 db.run('CREATE TABLE cube (uid integer PRIMARY KEY, label text, color text, contentTags text, items text, neighbours text)', (err) => {
@@ -63,8 +71,10 @@ const db = new sqlite.Database(dbPath, async (err) => {
             })
         ]
 
+        // stop execution until all tables are created
         await Promise.all(promArr);
 
+        // insert cubes into Database
         cubes.forEach((cube) => {
             db.run(`INSERT INTO cube (uid, label, color, contentTags, items, neighbours) VALUES (?, ?, ?, ?, ?, ?)`,
                 [cube.uid, cube.label, cube.color, cube.contentTags.join(';'), cube.items.join(';'), cube.neighbours.join(';')], (err) => {
@@ -77,6 +87,7 @@ const db = new sqlite.Database(dbPath, async (err) => {
                 })
         })
 
+        // insert Items into Database
         items.forEach((item) => {
             db.run('INSERT INTO item (itemUid, type, label, content, refs) VALUES (?, ?, ?, ?, ?)',
                 [item.itemUid, item.type, item.label, item.content.join(';'), item.refs.join(';')], (err) => {
@@ -89,6 +100,7 @@ const db = new sqlite.Database(dbPath, async (err) => {
                 })
         })
 
+        // insert Content into Database
         content.forEach((content) => {
             db.run('INSERT INTO content (contentId, label, contentType, text, src) VALUES (?, ?, ?, ?, ?)',
                 [content.id, content.label, content.contentType, content.text, content.src || ''], (err) => {
@@ -103,6 +115,7 @@ const db = new sqlite.Database(dbPath, async (err) => {
     }
 })
 
+// Close Database connection execution stop
 process.addListener('beforeExit', () => {
     if(db.open){
         db.close();

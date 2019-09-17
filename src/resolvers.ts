@@ -4,12 +4,15 @@ import { Item } from './models/Item';
 import { Cube } from './models/Cube';
 import * as path from 'path';
 import { Content } from './models/Content';
-import { RAMI } from './models/cube_scheme';
+import { RAMI, CubeScheme } from './models/cube_scheme';
 
 const DB_FILE_NAME = 'sqlite.db';
 
 const dbPath = path.join(__dirname, 'database', DB_FILE_NAME);
 
+/**
+ * Setup Database connection
+ */
 const db = new sqlite.Database(dbPath, sqlite.OPEN_READONLY, (err) => {
   if (err) {
     console.log('error in db');
@@ -19,6 +22,10 @@ const db = new sqlite.Database(dbPath, sqlite.OPEN_READONLY, (err) => {
   }
 })
 
+/**
+ * Converts Data from Database to javascript objects in memory
+ * @param dbItems Database resultset from Items table
+ */
 const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM `content`', (err: Error, res: DBContent[]) => {
@@ -43,6 +50,11 @@ const convertItems = (dbItems: DBItem[]): Promise<Item[]> => {
   })
 }
 
+/**
+ * Helper function used by all API Methods, to convert Database result of table Cubes to a Rami model
+ * @param dbCubes Resultset from Database
+ * @param fill Boolean whether or not the Model should be filled with empty Cubes
+ */
 const convertCubes = (dbCubes: DBCube[], fill: boolean = false): Promise<Cube[]> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM item', async (err: Error, res: DBItem[]) => {
@@ -50,20 +62,35 @@ const convertCubes = (dbCubes: DBCube[], fill: boolean = false): Promise<Cube[]>
         console.error(err.message);
         resolve([]);
       }
-
-      const items = await convertItems(res);
-
-      const cubes: Cube[] = new RAMI().build(dbCubes, fill);
-
-      cubes.forEach((cube: Cube, i: number, list: Cube[]): void => {
-        cube.getItems(items);
-        cube.getNeighbours(list);
-      })
-      resolve(cubes);
+      try{
+        const items = await convertItems(res);
+  
+        const rami: CubeScheme = new RAMI();
+  
+        const cubes: Cube[] = rami.build(dbCubes, fill);
+  
+        cubes.forEach((cube: Cube, i: number, list: Cube[]): void => {
+          cube.getItems(items);
+          cube.getNeighbours(list);
+        })
+        rami.checkConsistency(cubes);
+        resolve(cubes);
+      }catch(error){
+        console.error(error);
+        resolve([]);
+      }
     })
   })
 }
 
+/**
+ * Recursively navigates the graph data to find the shortest path between a given cube and a target cube.
+ * Main function for the pathTo method in the API
+ * @param cube Current cube from which point the search starts
+ * @param fullArray Array of all Cubes that have been visited by the recursive function
+ * @param targetId Cube to which the path should lead
+ * @param pathArray Array of Cubes on the current path
+ */
 const findPathRecursive = (cube: Cube, fullArray: Cube[], targetId: number, pathArray: Cube[]): Cube[] => {
   pathArray.push(cube);
   fullArray.push(cube);
@@ -82,6 +109,12 @@ const findPathRecursive = (cube: Cube, fullArray: Cube[], targetId: number, path
   return [];
 }
 
+/**
+ * Recursively paths through the graph of items, to find all items that are connected to a given item. 
+ * Items may be connection through several other items, they don't need to be directly connected. 
+ * @param item Current item from which the search originates
+ * @param array List of already visited items
+ */
 const findConnectedItemsRecursive = (item: Item, array: Item[]): Item[] => {
   array.push(item);
   item.refs.forEach(ref => {
@@ -92,12 +125,21 @@ const findConnectedItemsRecursive = (item: Item, array: Item[]): Item[] => {
   return array;
 }
 
+/**
+ * Closes db connection in case of server shutdown
+ */
 process.addListener('beforeExit', () => {
   db.close();
 })
 
+/**
+ * Exported object as Nodejs module, that exposes entrypoint functions that get executed on corresponding api calls to the server.
+ */
 export default {
   Query: {
+    /**
+     * Enty point function to get a list of all cubes. If id is given as argument only this specific cube will be returned.
+     */
     cubes: (parent: any, args: any, context: any, info: any) => {
       return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM cube`, (error: Error, result: DBCube[]) => {
@@ -118,6 +160,10 @@ export default {
         })
       })
     },
+    /**
+     * Entry point to a pathing function that returns the path between two cubes. Path in the sense of a path through graph data.
+     * Returns all cubes on the shortest path between the selected cubes. 
+     */
     pathTo: (parent: any, args: any, context: any, info: any) => {
       if (!args.startId || !args.targetId) return [];
       return new Promise((resolve, reject) => {
@@ -138,6 +184,9 @@ export default {
         })
       })
     },
+    /**
+     * Entry point function that returns all cubes that contain an item that is connected to a selected item.
+     */
     connectedOverItem: (parent: any, args: any, context: any, info: any) => {
       if (!args.itemId) return [];
 

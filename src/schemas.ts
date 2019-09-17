@@ -1,5 +1,8 @@
 import { gql } from 'apollo-server';
 
+/**
+ * Scheme for the GraphQL Api endpoint. Defines how a request query may look like. 
+ */
 export default gql`
 """
 A single room in the general Cube 

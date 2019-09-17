@@ -1,5 +1,8 @@
 import {DBItem, DBCube, Item} from './interfaces';
 
+/**
+ * Class representation of a Cube/Room in the RAMI Model
+ */
 export class Cube implements Cube {
     uid: number;
     label: string;
@@ -25,6 +28,12 @@ export class Cube implements Cube {
         })
     }
 
+    /**
+     * Sets the coordinate of this Cube
+     * @param z Z Coordinate
+     * @param x X Coordinate
+     * @param y Y Coordinate
+     */
     setCoords(z: number, x: number, y: number){
         if(z < 0 || x < 0 || y < 0){
             console.log(this.label + ' invalid coordinate');
@@ -34,6 +43,11 @@ export class Cube implements Cube {
         this.y = y;
     }
 
+    /**
+     * Translates the id list of neighbouring cubes to object references.
+     * Has to be executed after creation of all cubes in model. 
+     * @param cubeList Full list of Cubes
+     */
     getNeighbours(cubeList: Cube[]): void {
         const neighbourArr: Cube[] = [];
         this.neighbourIds.forEach((id:number) => {
@@ -45,6 +59,11 @@ export class Cube implements Cube {
         this.neighbours = neighbourArr;
     }
 
+    /**
+     * Translates item id list to list of object references, just like getNeighbours.
+     * Has to be executed after all Item objects have been initialized. 
+     * @param itemList Full list of Items in Model
+     */
     getItems(itemList: Item[]): void {
         const itemArr: Item[] = [];
         this.itemIds.forEach((id:number) => {
@@ -54,5 +73,19 @@ export class Cube implements Cube {
             }
         })
         this.items = itemArr;
+    }
+
+    /**
+     * Checks whether all Connections to other cubes are mutual. 
+     */
+    checkMyNeighbours(): boolean {
+        let neighboursOk = true;
+        this.neighbours.forEach((neighbour: Cube):void => {
+            const index = neighbour.neighbours.findIndex((trailbackCube:Cube):boolean => trailbackCube.uid === this.uid);
+            if(index === -1){
+                neighboursOk = false;
+            }
+        })
+        return neighboursOk;
     }
 }

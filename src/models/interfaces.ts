@@ -1,4 +1,6 @@
-
+/**
+ * Database Model for Cubes
+ */
 export interface DBCube {
     uid: number;
     label: string;
@@ -8,6 +10,9 @@ export interface DBCube {
     neighbours: string;
 }
 
+/**
+ * Database Model for Items
+ */
 export interface DBItem {
     itemUid: number;
     type: string;
@@ -16,6 +21,9 @@ export interface DBItem {
     refs: string
 }
 
+/**
+ * Database Model for Itemcontent
+ */
 export interface DBContent {
     contentId: number,
     label: string,
@@ -24,6 +32,9 @@ export interface DBContent {
     src: string,
 }
 
+/**
+ * Interface for Item Content Objects
+ */
 export interface Content {
     contentId: number;
     label: string;
@@ -32,6 +43,9 @@ export interface Content {
     src: string;
 }
 
+/**
+ * Interface for Item Objects
+ */
 export interface Item {
     itemUid: number;
     type: 'book' | 'shelf' | 'unknown';
@@ -40,6 +54,9 @@ export interface Item {
     refs: Item[];
 }
 
+/**
+ * Interface for Cube Objects
+ */
 export interface Cube {
     uid: number;
     label: string;

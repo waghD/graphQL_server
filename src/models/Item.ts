@@ -1,6 +1,9 @@
 import {DBItem} from './interfaces';
 import { Content } from './Content';
 
+/**
+ * Class representation of an Item
+ */
 export class Item implements Item{
     itemUid: number;
     type: 'book' | 'shelf' | 'unknown';
@@ -23,6 +26,11 @@ export class Item implements Item{
         })
     }
 
+    /**
+     * Translates content ids to object references.
+     * Has to be executed after all content objects are initialized.
+     * @param contentList Full list of all Content Objects in memory
+     */
     getContent(contentList: Content[]): void {
         const contentArr: Content[] = [];
         this.contentIds.forEach((id:number) => {
@@ -34,6 +42,11 @@ export class Item implements Item{
         this.content = contentArr;
     }
 
+    /**
+     * Translates item ids to object references.
+     * Has to be executed after all item objects are initialized
+     * @param itemList Full list of all Item objects in memory
+     */
     getRefs(itemList: Item[]):void {
         const itemArr: Item[] = [];
         this.itemIds.forEach((id:number) => {

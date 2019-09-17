@@ -4,6 +4,10 @@ import { environment } from './environment';
 import resolvers from './resolvers';
 import typeDefs from './schemas';
 
+/**
+ * Starts Server to listen on port specified in .env file.
+ * Hands over the handler functions and the scheme to define the GraphQL API.
+ */
 const server = new ApolloServer({
   resolvers,
   typeDefs,
