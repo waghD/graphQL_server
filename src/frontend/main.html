@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="./js/jquery.min.3.3.1.js"></script>
+    <script src="./js/methods.js"></script>
+    <script src="./js/Navigator.js"></script>
+
+    <script src="./js/room.js"></script>
+    <script src="./js/map.js"></script>
+    <script src="./js/cube.js"></script>
+    <script src="./js/graphql.js"></script>
+    <script src="./js/three.js"></script>
+    <script src="./js/threex.domevents.js"></script>
+    <script src="./js/GLTFLoader.js"></script>
+    <script src="./js/html.elements.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="./css/exploration.css">
+</head>
+
+<body>
+<!--
+    <div id="connectionForm">
+        <label for="servUrl">Server:</label>
+        <input type="text" id="servUrl" value="http://localhost" />
+        <label for="servPort">Port:</label>
+        <input type="number" min="1" step="1" id="servPort" value="4000" />
+        <button id="connectButton">Laden...</button>
+        <span id="connectionInfo"></span>
+    </div>
+-->
+    <canvas id="explorationCanvas" style="display:none;">
+        Error displaying the knowledge exploration system!
+    </canvas>
+
+    <canvas id="mapCanvas" style="display:none;">
+        Error displaying the knowledge exploration system!
+    </canvas>
+
+    <div id="explLayerSelector" style="display:none;">
+    </div>
+
+    <div id="contentModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="header-line">
+                <span class="page-counter-disp"></span>
+            </div>
+            <div class="center-box">
+                <div class="arrow-box">
+                    <img class="prev-content-arr" src="./assets/navigation-left.png" />
+                </div>
+                <div class="modal-content-box">
+                </div>
+                <div class="arrow-box">
+                    <img class="next-content-arr" src="./assets/navigation-right.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+       var ref = this;
+var canvas = document.getElementById('explorationCanvas');
+
+
+var map = null;
+var ctx = canvas.getContext('2d');
+var cubeLength = null;
+var displayLayers = [];
+var nrOfLayers = null;
+var nrOfLevels = null;
+var cubes = [];
+var items = {};
+var isCubeSelected = false;
+var selectedCube = null;
+var room = null;
+var modal = null;
+var maxX = 0,
+    maxY = 0,
+    maxZ = 0;
+	canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+//Instantiate object for helper methods of methods.js
+var methods = new Methods();
+var self = this;
+
+$(document).ready(function() {
+
+    //Loads cube configuration from server
+    /*$('#connectButton').on('click', async () => {
+        disableLoadButton();
+        let url = $('#servUrl').val();
+        let port = $('#servPort').val();
+        let conf = await loadCubeConfiguration(url, port)
+            .catch(error => {
+                console.log(error);
+                $('#connectionInfo').text("Error: " + error.message);
+                enableLoadButton();
+
+
+            });
+        if (conf !== undefined) {
+            initializeCube(conf.data.cubes);
+            $('#connectionForm').css('display', 'none');
+            $('#explLayerSelector, #explorationCanvas').css('display', '');
+
+            initializeModal();
+            window.addEventListener('resize', resizeFunc);
+            canvas.addEventListener('click', clickEvent, false);
+            canvas.addEventListener('mousemove', mouseMoveEvent, false);
+        }
+    });*/
+	(async () => {
+		let dbUrl = "http://localhost";
+        let dbPort = "4000";
+        let conf = await methods.loadCubeConfiguration(dbUrl, dbPort)
+            .catch(error => {
+                console.log(error);
+            });
+		methods.initializeCube(conf.data.cubes, self);
+		$('#explLayerSelector, #explorationCanvas').css('display', '');
+		methods.initializeModal();
+        window.addEventListener('resize', resizeFunc);
+        canvas.addEventListener('click', clickEvent, false);
+        canvas.addEventListener('mousemove', mouseMoveEvent, false);
+	})();
+    /**
+     * Resize function for cube responsiveness
+     **/
+    function resizeFunc() {
+        cubeLength = window.innerWidth / Math.max(maxX, maxY, maxZ) / 8;
+        for (let i = 0; i < cubes.length; i++) {
+            cubes[i].wx = cubeLength;
+            cubes[i].wy = cubeLength;
+            cubes[i].h = cubeLength;
+            cubes[i].x = window.innerWidth / 2 - cubeLength * 1.5 * cubes[i].cords.x + cubeLength * 1.5 * cubes[i].cords.y;
+            cubes[i].y = window.innerHeight / 2 + cubeLength * 0.75 * cubes[i].cords.x + cubeLength * 0.75 * cubes[i].cords.y - cubeLength * 1.5 * cubes[i].cords.z;
+        }
+        map.map.width = window.innerWidth / 3;
+        map.map.height = window.innerHeight / 2;
+        map.cubeLength = (window.innerWidth / 3) / Math.max(maxX, maxY, maxZ) / 4;
+        if (document.querySelector("#mapCanvas").style.display != "none")
+            map.repaintMapCube(cubes, selectedCube);
+        methods.repaintCube(cubes);
+        let mapButtonContainer = document.getElementById('mapButtonContainer');
+        mapButtonContainer.style.height = map.map.height + "px";
+    }
+
+    /**
+     * On Click on cube / Choosing the entry point 
+     */
+    function clickEvent(e) {
+        if (selectedCube !== null) {
+            document.querySelector("#explorationCanvas").style.display = "none";
+            document.querySelector("#explLayerSelector").style.display = "none";
+            map.show();
+            let directions = methods.getDirections(selectedCube);
+            //roomRef = enterCube(selectedCube, directions, document.body, ref);
+            room = new Room(cubes, selectedCube, directions, document.body, ref);
+            map.repaintMapCube(cubes, "", [], null, true, selectedCube);
+        }	
+    }
+
+    /**
+     * On mousemove, redraw cubes and determine hover motion of mouse
+     */
+    function mouseMoveEvent(e) {
+        isCubeSelected = false;
+        selectedCube = null;
+        var rect = this.getBoundingClientRect(),
+            x = e.clientX - rect.left,
+            y = e.clientY - rect.top,
+            i = 0,
+            r;
+
+        let hoverCubeArr = [];
+        let topText = "";
+        //sort for draw order
+        let showCubes = [...cubes].sort((b2, b1) => methods.sortByXYZCoordinates(b1, b2));                
+
+        for (let i = 0; i < showCubes.length; i++) {
+            let block = methods.iterationCopy(showCubes[i]);
+            //Draw cube to determine if mouse is hovering over cube
+            ctx.beginPath();
+            drawTopSidePathOfCube(ctx, block.x, block.y, block.cubeLength, block.cubeLength, block.cubeLength);
+            drawLeftSidePathOfCube(ctx, block.x, block.y, block.cubeLength, block.cubeLength);
+            drawRightSidePathOfCube(ctx, block.x, block.y, block.cubeLength, block.cubeLength);
+            ctx.closePath();
+            //if no restriction on layers is made or layer of this block is visible, cube is visible on screen
+            let isVisible = displayLayers.length == 0 || displayLayers.includes(block.cords.z) ? true : false;
+
+            if (ctx.isPointInPath(x, y) && !isCubeSelected && block.uid !== null && isVisible) {
+                isCubeSelected = true;
+                selectedCube = block;
+                block.color = "#565652";
+                topText = block.label;
+            }
+            hoverCubeArr.push(block);
+        };
+        methods.repaintCube(hoverCubeArr.reverse());
+        //set top text
+        ctx.font = "bold 30px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#000000";
+        ctx.fillText(topText, canvas.width / 2, 50);
+    }
+
+});
+    </script>
+</body>
+</html>

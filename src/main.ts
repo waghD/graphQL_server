@@ -22,3 +22,20 @@ if (module.hot) {
   module.hot.accept();
   module.hot.dispose(() => server.stop());
 }
+
+/**
+ * Launch Frontend Server
+ */
+var express = require('express');
+var app = express();
+var path = require('path');
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/../frontend/main.html'), { root: __dirname });
+});
+
+app.use('/css', express.static(__dirname + '/frontend/css'));
+app.use('/js', express.static(__dirname + '/frontend/js'));
+app.use('/assets', express.static(__dirname + '/frontend/assets'));
+
+app.listen(4001);

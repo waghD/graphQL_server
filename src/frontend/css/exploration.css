@@ -1,0 +1,298 @@
+body {
+	overflow:hidden;
+}
+
+.button {
+    padding: 10px;
+    margin: 10px;
+}
+
+.current-room {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#mapButtonContainer {
+    z-index: 10;
+}
+
+#mapCanvas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+#connectionForm {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#connectionInfo {
+    margin-top: 20px;
+    color: red;
+    font-size: 1.6rem;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+#connectButton {
+    color: #fff;
+    background-color: #1d2124;
+    border-color: #171a1d;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+#connectionForm input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.toptext {
+    text-align: center;
+    font-family: Helvetica;
+    z-index: 2;
+    background-color: white;
+    font-size: 2vw;
+    display: block;
+    width: 30%;
+    /* margin-right: auto; */
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    /* margin-left: auto; */
+    position: absolute;
+    /* left: 50%; */
+}
+
+.cont-img {
+    max-height: 80vh;
+    max-width: 80vw;
+}
+
+.cont-container {
+    text-align: center;
+}
+
+#relationContainer {
+    background-color: rgba(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.relation-object-container {
+    text-align: center;
+    margin-top: 20px;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.obj-item-link {
+    text-decoration: none;
+    font-size: 1.2vw;
+    color: white;
+    font-family: verdana;
+}
+
+.item-link {
+    text-decoration: none;
+    font-size: 1vw;
+    color: black;
+    font-family: verdana;
+}
+
+.item-link:hover {
+    color: blue;
+}
+
+.overall {
+    z-index: 100;
+    position: absolute;
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+
+/* Modal Content/Box */
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+}
+
+#explorationCanvas {
+    position: absolute;
+    top: 0;
+}
+
+#mapLayerSelector {
+    justify-content: center;
+    float: right;
+    position: relative;
+    display: flex;
+    flex-flow: column wrap-reverse;
+    height: inherit;
+}
+
+#explLayerSelector {
+    float: right;
+    position: relative;
+    display: flex;
+    flex-flow: column wrap-reverse;
+    height: inherit;
+}
+
+#mapLayerSelector>a.active,
+#explLayerSelector>a.active {
+    background-color: darkgoldenrod;
+}
+
+.relation-object-container.active {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#mapLayerSelector>a:hover,
+#explLayerSelector>a:hover {
+    color: white;
+    background-color: darkgoldenrod;
+    cursor: pointer;
+}
+
+#mapLayerSelector>a,
+#explLayerSelector>a {
+    z-index: 99;
+    display: block;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: black;
+    background-color: darkgrey;
+    padding: 10px;
+    /* border-top: beige; */
+    border-style: solid;
+    border-width: 1.5px 1px 1.5px 1px;
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+#explLayerSelector {
+    right: 0px;
+    position: absolute;
+    z-index: 99;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+#closeRelContainer {
+    float: right;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#mapButtonContainer {
+    z-index: 10;
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+img#closeRelContainer:hover {
+    background: orange;
+}
+
+.center-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrow-box:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.center-box img {
+    cursor: pointer;
+}
+
+.header-line {
+    text-align: center;
+}

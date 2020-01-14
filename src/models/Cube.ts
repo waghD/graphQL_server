@@ -1,4 +1,4 @@
-import {DBItem, DBCube, Item} from './interfaces';
+import {DBCube, Item} from './interfaces';
 
 /**
  * Class representation of a Cube/Room in the RAMI Model
